@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang='en'>
+	<head>
+		<title>Loading</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta charset="utf-8">
+		<style>
+			@font-face {
+				font-family: EBA_Default;
+				src: url('https://ethanblaisalarms.github.io/eba-fakeware/EBA_Default.ttf');
+			}
+			body {
+				font-family: EBA_Default;
+				text-align: center;
+				background-color: #3f48cc;
+			}
+			h1 {
+				font-size: 96px;
+				text-decoration: bold;
+				text-align: center;
+			}
+			h2 {
+				font-size: 72px;
+				text-decoration: bold;
+				text-align: center;
+			}
+			h3 {
+				font-size: 48px;
+				text-decoration: bold;
+				text-align: center;
+			}
+			.err {
+				color: red;
+				text-align: center;
+			}
+			#navigation {
+				display: flex;
+				justify-content: space-around;
+				background-color: #3f48cc;
+				color: white;
+			}
+			#navigation button {
+				width: 15%;
+				border: 1px solid black;
+				padding: 10px;
+			}
+			#buyTicket button, #buyHead button {
+				width: 75%;
+				border: 1px solid black;
+				padding: 10px;
+				background-color: yellow;
+			}
+			button {
+				text-align: center;
+				color: black;
+				cursor: pointer;
+				font-size: 20px;
+			}
+			button:hover {
+				background-color: #BBBBBB;
+			}
+			#buyTicket button:hover, #buyHead button:hover {
+				background-color: #AAAA00;
+				color: white;
+			}
+			p {
+				font-size: 28px;
+			}
+			label {
+				font-size: 16px;
+			}
+			hr {
+				width: 100%;
+				margin-left: 0;
+				text-align: left;
+			}
+			#headerDiv {
+				background-image: url('EBAParkHead.png');
+				background-repeat: no-repeat;
+				background-attachment: fixed;
+				background-size: 100% 100%;
+				color: #FFFFFF;
+			}
+			#reviews {
+				display: flex;
+				justify-content: space-around;
+			}
+			#errForm {
+				font-size: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<noscript>
+			<h2 class='err'>Something Went Wrong</h2>
+			<p class='err'>Error NO_SCRIPT: JavaScript is either disabled in your browser settings, or your browser doesn't support it. Please ensure JavaScript is enabled and supported, then reload the page.</p>
+		</noscript>
+		
+		<div id='headerDiv'>
+			<div id='navigation'></div>
+			<!-- <hr color="#000000" noshade> -->
+			<h1 id='title'></h1>
+			<div id='buyHead'></div>
+			<h2 id='errHead' class='err'></h2>
+			<h3 id='errInfo' class='err'></h3>
+			<div id='p1'>
+				<h2 id='header1'></h2>
+				<p id='section1'></p>
+			</div>
+		</div>
+		<div id='p2'>
+			<h2 id='header2'></h2>
+			<p id='section2'></p>
+			<div id='reviews'></div>
+			<p id='errForm' class='err'></p>
+			<div id='forms'></div>
+		</div>
+		<div id='p3'>
+			<h2 id='header3'></h2>
+			<p id='section3'></p>
+			<div id='buyTicket'></div>
+		</div>
+		<script>
+			// Initialize Variables
+			const urlParams = new URLSearchParams(window.location.search)
+			let page = 'home'
+			let park = { 'name': 'Park Name', 'deaths': 19 }
+			let formGood = true
+			let formErr = ''
+			let navigation = document.getElementById('navigation')
+			let title = document.getElementById('title')
+			let buyHead = document.getElementById('buyHead')
+			let errHead = document.getElementById('errHead')
+			let errInfo = document.getElementById('errInfo')
+			let header1 = document.getElementById('header1')
+			let section1 = document.getElementById('section1')
+			let header2 = document.getElementById('header2')
+			let section2 = document.getElementById('section2')
+			let reviews = document.getElementById('reviews')
+			let errForm = document.getElementById('errForm')
+			let forms = document.getElementById('forms')
+			let header3 = document.getElementById('header3')
+			let section3 = document.getElementById('section3')
+			let buyTicket = document.getElementById('buyTicket')
+			
+			// Create Navigation Bar
+			navigation.innerHTML = '<p>' + park.name + '</p>' + '<button onclick=\'document.location="?page=home"\'>Home</button>' + '<button onclick=\'document.location="?page=rides"\'>Rides</button>' + '<button onclick=\'document.location="?page=entertainment"\'>Entertainment</button>' + '<button onclick=\'document.location="?page=dining"\'>Dining</button>' + '<button onclick=\'document.location="?page=shops"\'>Shops</button>'
+			
+			// Check Device
+			let device = { "userAgent": navigator.userAgent, "mobile": false, "tablet": false, "computer": false }
+			if (/Mobi/.test(device.userAgent)) {
+				device.mobile = true
+				device.computer = false
+			}
+			if (screen.width < screen.height) {
+				device.mobile = true
+				device.computer = false
+			}
+			if (device.mobile) { navigation.style.display="none" }
+			
+			if (urlParams.has('page')) { page = urlParams.get('page') }
+			
+			document.title = park.name + ' | ' + capitalize(page)
+			
+			
+			
+			setPage(page)
+			
+			// Choose Page
+			function setPage(page) {
+				title.innerHTML = ''
+				buyHead.innerHTML = '<button onclick="document.location=\'?page=buy\'">Buy Tickets Now</button>'
+				errHead.innerHTML = ''
+				errInfo.innerHTML = ''
+				header1.innerHTML = ''
+				section1.innerHTML = ''
+				header2.innerHTML = ''
+				section2.innerHTML = ''
+				reviews.innerHTML = ''
+				errForm.innerHTML = ''
+				forms.innerHTML = ''
+				header3.innerHTML = ''
+				section3.innerHTML = ''
+				buyTicket.innerHTML = ''
+				switch (page) {
+					case 'home':
+						title.innerHTML = park.name
+						header1.innerHTML = 'The worst amusement park in town!'
+						section1.innerHTML = 'Fun for none of the family!'
+						header2.innerHTML = 'Reviews'
+						section2.innerHTML = 'Here\'s what people are saying about ' + park.name
+						reviews.innerHTML = '<img src="ReviewJake.png" height="215px" width="461px"></img><img src="ReviewGavin.png" height="215px" width="461px"></img><img src="ReviewBrandon.png" height="215px" width="461px"></img>'
+						buyTicket.innerHTML = '<button onclick="document.location=\'?page=buy\'">Buy Tickets Now</button>'
+						break
+					
+					case 'rides':
+						title.innerHTML = 'Rides'
+						header1.innerHTML = 'A list of all of our terrible rides'
+						//section2.innerHTML = 'Tribute to the ' + park.deaths + ' people who have died today at ' + park.name + '. R.I.P.'
+						//setInterval(() => { park.deaths += 1; section2.innerHTML = 'Tribute to the ' + park.deaths + ' people who have died today at ' + park.name + '. R.I.P.' }, 5000)
+						section3.innerHTML = '<img src="TerrisWheel.png" width="425px" height="425px"></img><h2>The Terris Wheel</h2><p>The Terrible Ferris Wheel (Terris Wheel for short), is a ferris wheel that no longer ferrises... if that\'s even a word. It hasn\'t been used since "the incident"... which we don\'t talk about.'
+						break
+					
+					case 'entertainment':
+						title.innerHTML = 'Anti-Entertainment'
+						header1.innerHTML = 'I think the website designers messed up. This page is called "Anti-Entertainment"'
+						document.title = park.name + ' | Anti-Entertainment'
+						section1.innerHTML = 'If you expect to come to ${park.nsme} and have fun, we\'re here to put an end to your dreams.'
+						//section2.innerHTML = 'Tribute to the 19273 people who have died on the day of "the incident". R.I.P. You won\'t be remembered.'
+						section3.innerHTML = '<img src="CannonBall.png" width="425px" height="425px"></img><h2>The Cannon Ball</h2><p>Ever wanted to be shot out of a cannon? Hope not because that\'s not what this is. You get shot by a cannon whenever you enter the park! It\'s totally safe, don\'t worry. ' + park.name + ' not responsible for injuries or death due to cannon.</p>'
+						break
+					
+					case 'dining':
+						title.innerHTML = 'Dining'
+						header1.innerHTML = 'The worst amusement park in town serves the worst food in the state!'
+						section1.innerHTML = park.name + ' not responsible for sickness or death due to eating the worst food in the state.'
+						section3.innerHTML = '<img src="Poison.png" width="425px" height="425px"></img><h2>Poison in a Bottle</h2><p>Tasty! Or not.</p>'
+						break
+					
+					case 'shops':
+						title.innerHTML = 'Shops'
+						header1.innerHTML = 'We\'ve also got a terrible selection of gift shops'
+						section1.innerHTML = 'Overpriced goodies that are completely worthless.'
+						section3.innerHTML = '<img src="TNT.png" width="425px" height="425px"></img><h2>(totally fake) Minecraft TNT</h2><p>Some may say it\'s not even related to ' + park.name + '. In my opinion, both tend to leave people unhappy. Don\'t worry, these things won\'t actually explode. ' + park.name + ' not responsible for injuries or death due to tnt.</p>'
+						break
+					
+					case 'admin':
+						errHead.innerHTML = 'Something Went Wrong'
+						errInfo.innerHTML = 'Error 403: Access denied'
+						buyHead.innerHTML = ''
+						break
+					
+					case 'buy':
+						document.title = park.name + ' | Buy Tickets'
+						title.innerHTML = 'Buy Tickets'
+						header1.innerHTML = 'Contact Information'
+						section1.innerHTML = 'Please enter your contact information below'
+						forms.innerHTML = '<form><label for="firstName">First Name:</label><br><input id="firstName" name="firstName" type="text"></input><br><label for="lastName">Last Name:</label><br><input id="lastName" name="lastName" type="text"></input><br><label for="email">Email Address:</label><br><input id="email" name="email" type="email"></input><br><label for="phone">Phone Number:</label><br><input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"></input><br><input id="submit" name="submit" type="button" value="Proceed to Payment" onclick="submitForm(\'contactInfo\', this.form)"></input></form>'
+						buyHead.innerHTML = ''
+						break
+					
+					case 'payment':
+						document.title = park.name + ' | Buy Tickets'
+						title.innerHTML = 'Buy Tickets'
+						header1.innerHTML = 'Payment Information'
+						section1.innerHTML = 'Please enter your payment information below'
+						if (!urlParams.has('name') || !urlParams.has('email') || !urlParams.has('phone')) {
+							document.location = '?page=error&code=400&msg=Bad%20request&type=page&src=?page=payment'
+						} else {
+							forms.innerHTML = '<form><label for="cardholder">Cardholder Name:</label><br><input id="cardholder" name="cardholder" type="text" value="' + urlParams.get('name') + '"></input><br><label for="cardnum">Card Number:</label><br><input id="cardnum" name="cardnum" type="number"></input><br><label for="expiry">Expiration Date:</label><br><input id="expiry" name="expiry" type="text"></input><br><label for="security">Security Code:</label><br><input type="number" id="security" name="security"></input><br><input id="submit" name="submit" type="button" value="Purchase Ticket" onclick="submitForm(\'buyTicket\', this.form)"></input></form>'
+						}
+						break
+					
+					case 'success':
+						title.innerHTML = 'Thanks for Buying!'
+						header2.innerHTML = 'Thanks for your personal information as well :)'
+						section2.innerHTML = 'By clicking Purchase Ticket, you agreed to allow me to use your personal information and money whenever and wherever I want. Thanks!'
+						break
+					
+					case 'error':
+						let errCode = 'UNKNOWN'
+						let errMesg = 'An unknown error occurred'
+						let errType = 'Unknown'
+						let errSorc = 'Unknown'
+						if (urlParams.has('code')) { errCode = urlParams.get('code') }
+						if (urlParams.has('msg')) { errMesg = urlParams.get('msg') }
+						if (urlParams.has('type')) { errType = urlParams.get('type') }
+						if (urlParams.has('src')) { errSorc = urlParams.get('src') }
+						errHead.innerHTML = 'Something Went Wrong'
+						errInfo.innerHTML = 'Error ' + errCode + ': ' + errMesg + '.<br>Error Type: ' + errType + '<br>Error Source: ' + errSorc
+						buyHead.innerHTML = ''
+						break
+					
+					default:
+						document.title = park.name + ' | Error'
+						errHead.innerHTML = 'Something Went Wrong'
+						errInfo.innerHTML = 'Error 404: Page not found.'
+						buyHead.innerHTML = ''
+				}
+			}
+			
+			// On Form Submit
+			function submitForm(name, form) {
+				formGood = true
+				formErr = ''
+				switch (name) {
+					case 'contactInfo':
+						formErr = 'All fields must be filled. Please check:'
+						if (form.firstName.value == '') { formGood = false; formErr += ' First Name;' }
+						if (form.lastName.value == '') { formGood = false; formErr += ' Last Name;' }
+						if (form.email.value == '') { formGood = false; formErr += ' Email Address;' }
+						if (form.phone.value == '') { formGood = false; formErr += ' Phone Number;' }
+						if (formGood) {
+							document.location = '?page=payment&name=' + form.firstName.value + '%20' + form.lastName.value + '&email=' + form.email.value + '&phone=' + form.phone.value
+						} else {
+							errForm.innerHTML = formErr
+						}
+						break
+					
+					case 'buyTicket':
+						formErr = 'All fields must be filled. Please check:'
+						if (form.cardholder.value == '') { formGood = false; formErr += ' Cardholder Name;' }
+						if (form.cardnum.value == '') { formGood = false; formErr += ' Card Number;' }
+						if (form.expiry.value == '') { formGood = false; formErr += ' Expiration Date;' }
+						if (form.security.value == '') { formGood = false; formErr += ' Security Code;' }
+						if (formGood) {
+							document.location = '?page=success&name=' + form.cardholder.value + '&email=' + urlParams.get('email') + '&phone=' + urlParams.get('phone') + '&cardnum=' + form.cardnum.value + '&expiry=' + form.expiry.value + '&security=' + form.security.value
+						} else {
+							errForm.innerHTML = formErr
+						}
+						break
+					
+					default:
+						document.location = '?page=error&code=400&msg=Bad%20request&type=form&src=?page=' + page
+						break
+				}
+			}
+			
+			// JavaScript Functions
+			function capitalize(input) {
+				return input.charAt(0).toUpperCase() + input.slice(1)
+			}
+		</script>
+	</body>
+</html>
